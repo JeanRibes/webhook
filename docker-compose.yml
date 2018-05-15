@@ -1,0 +1,22 @@
+version: '2'
+services:
+  gitsync:
+    image: jeanribes/webhook
+    volumes:
+      - site-repo:/repo
+    environment:
+      - GITHUB_REPO=https://github.com/BdEINSALyon/site-dev.git
+      - TOKEN=lol
+      - BRANCH=master
+    ports:
+      - 8080:80
+  webserver:
+    image: nginx
+    volumes:
+      - site-repo:/usr/share/nginx/html:ro
+    depends_on:
+      - gitsync
+    ports:
+      - 80:80
+volumes:
+  site-repo:
